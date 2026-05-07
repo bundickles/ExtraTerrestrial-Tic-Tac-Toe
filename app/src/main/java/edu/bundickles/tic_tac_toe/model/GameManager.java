@@ -3,10 +3,31 @@ package edu.bundickles.tic_tac_toe.model;
 public class GameManager {
     private GameBoard gameBoard;
     private char currentPlayer;
+    private Player player1;
+    private Player player2;
+    private char player1Symbol;
+    private char player2Symbol;
 
-    public GameManager() {
-        gameBoard = new GameBoard();
-        currentPlayer = 'X';
+    public Player getPlayer1() {
+        return player1;
+    }
+    public Player getPlayer2() {
+        return player2;
+    }
+    public char getPlayer1Symbol() {
+        return player1Symbol;
+    }
+    public char getPlayer2Symbol() {
+        return player2Symbol;
+    }
+
+    public GameManager(Player p1, Player p2, char symb1, char symb2) {
+        this.gameBoard = new GameBoard();
+        this.player1 = p1;
+        this.player2 = p2;
+        this.player1Symbol = symb1;
+        this.player2Symbol = symb2;
+        this.currentPlayer = player1Symbol;
     }
 
     public boolean canPlayMove(int row, int col) {
@@ -16,7 +37,9 @@ public class GameManager {
     }
 
     private void switchPlayer() {
-        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        currentPlayer = (currentPlayer == player1Symbol)
+            ? player2Symbol
+            : player1Symbol;
     }
 
     public char checkWinner(){
@@ -40,5 +63,28 @@ public class GameManager {
 
     public char getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public boolean isDraw() {
+        char[][] b = gameBoard.getGameBoard();
+
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                if(b[i][j] == ' ') {
+                    return false;
+                }
+            }
+        }
+        return checkWinner() == ' ';
+    }
+
+    public Player getPlayerBySymbol(char symbol) {
+        if(symbol == player1Symbol) return player1;
+        return player2;
+    }
+
+    public void resetGame() {
+        gameBoard.resetGameBoard();
+        currentPlayer = player1Symbol;
     }
 }
